@@ -45,23 +45,12 @@ func main() {
 	}
 
 	// Parse the JSON response
-	var apiResponse OMDbAPIResponse
-	fmt.Println(body)
-	if err := json.Unmarshal(body, &apiResponse); err != nil {
-		log.Fatalf("Error unmarshaling response: %v", err)
+	var data map[string]interface{}
+	if err := json.Unmarshal(body, &data); err != nil {
+		log.Fatalf("Error parsing response: %v", err)
 	}
 
-	// Check if the response contains movies
-	if apiResponse.Response == "False" {
-		fmt.Println("No movies found.")
-		return
+	for key, value := range data {
+		fmt.Printf("%s: %v\n", key, value)
 	}
 
-	fmt.Println(apiResponse)
-
-	// Display horror movies and their ratings
-	fmt.Println("Current Horror Movies and Ratings:")
-	for _, movie := range apiResponse.Search {
-		fmt.Printf("Title: %s\nYear: %s\nRating: %s\n\n", movie.Title, movie.Year, movie.Rating)
-	}
-}
